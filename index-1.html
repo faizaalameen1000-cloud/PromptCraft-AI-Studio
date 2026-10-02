@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PromptCraft AI Studio</title>
+<meta name="description" content="Turn simple ideas into professional AI prompts and video storyboards.">
+<style>
+:root{
+  --bg:#070a13;--panel:#0f1424;--panel2:#151b2f;--text:#f7f8ff;--muted:#aab2c8;
+  --line:rgba(255,255,255,.10);--accent:#8b7cff;--accent2:#43d9c5;--shadow:0 24px 70px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:
+radial-gradient(circle at 15% 10%,rgba(139,124,255,.18),transparent 30%),
+radial-gradient(circle at 85% 20%,rgba(67,217,197,.10),transparent 25%),var(--bg);color:var(--text);line-height:1.6}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.container{width:min(1120px,92%);margin:auto}
+nav{position:sticky;top:0;z-index:20;background:rgba(7,10,19,.76);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.nav-inner{height:72px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800;letter-spacing:-.5px;font-size:1.12rem}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:24px;color:var(--muted);font-size:.94rem}
+.nav-links a:hover{color:var(--text)}
+.menu{display:none;background:none;border:0;color:var(--text);font-size:1.5rem}
+.hero{padding:92px 0 70px;text-align:center}
+.badge{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.04);padding:7px 12px;border-radius:999px;color:#d9d6ff;font-size:.82rem}
+.hero h1{font-size:clamp(2.6rem,7vw,5.3rem);line-height:.98;letter-spacing:-.055em;margin:22px auto;max-width:850px}
+.gradient{background:linear-gradient(100deg,#fff 20%,#a99fff 55%,#55e4d1);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:680px;margin:auto;color:var(--muted);font-size:1.08rem}
+.cta{display:flex;justify-content:center;gap:12px;margin-top:30px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:12px 18px;border-radius:12px;font-weight:700;transition:.2s}
+.btn:hover{transform:translateY(-2px);border-color:rgba(139,124,255,.6)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#6558e8);border:0}
+.section{padding:76px 0}
+.section-head{margin-bottom:28px}
+.eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:.72rem;color:var(--accent2);font-weight:800}
+h2{font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-.035em;margin-top:7px}
+.section-head p{color:var(--muted);max-width:680px;margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.card .icon{font-size:1.7rem;margin-bottom:15px}
+.card h3{margin-bottom:7px}
+.card p{color:var(--muted);font-size:.94rem}
+.workflow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.step{padding:20px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.035)}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:rgba(139,124,255,.18);color:#c9c4ff;font-weight:800;margin-bottom:12px}
+.tool{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.form-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px}
+label{display:block;color:#dfe3f2;font-size:.86rem;font-weight:700;margin:0 0 7px}
+input,textarea,select{width:100%;background:#0a0e1b;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;margin-bottom:15px}
+input:focus,textarea:focus,select:focus{border-color:rgba(139,124,255,.8);box-shadow:0 0 0 3px rgba(139,124,255,.1)}
+textarea{min-height:130px;resize:vertical}
+.result{min-height:100%;display:flex;flex-direction:column}
+.result-box{background:#090d18;border:1px solid var(--line);border-radius:15px;padding:18px;white-space:pre-wrap;color:#dfe3f2;min-height:280px;overflow:auto}
+.result-actions{display:flex;gap:9px;margin-top:12px}
+.small{font-size:.8rem;color:var(--muted)}
+.storyboard{display:grid;gap:12px;margin-top:15px}
+.scene{background:#0a0e1b;border:1px solid var(--line);border-radius:15px;padding:16px}
+.scene strong{color:#c9c4ff}
+.scene p{color:#cbd1e2;margin-top:5px;font-size:.9rem}
+.library{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.prompt-card{border:1px solid var(--line);border-radius:16px;padding:18px;background:rgba(255,255,255,.035)}
+.prompt-card .tag{display:inline-block;color:#bdb7ff;background:rgba(139,124,255,.12);padding:4px 8px;border-radius:999px;font-size:.72rem;margin-bottom:10px}
+footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted);font-size:.85rem}
+.toast{position:fixed;bottom:22px;right:22px;background:#eef1ff;color:#101321;padding:12px 16px;border-radius:12px;font-weight:700;transform:translateY(120px);transition:.3s;z-index:50}
+.toast.show{transform:translateY(0)}
+@media(max-width:800px){
+ .nav-links{display:none}.menu{display:block}.nav-links.open{display:flex;position:absolute;top:72px;left:0;right:0;background:#0a0e19;padding:18px 4%;flex-direction:column;gap:15px;border-bottom:1px solid var(--line)}
+ .grid,.library{grid-template-columns:1fr}.workflow{grid-template-columns:1fr 1fr}.tool{grid-template-columns:1fr}.hero{padding-top:65px}
+}
+@media(max-width:480px){.workflow{grid-template-columns:1fr}.hero h1{font-size:2.7rem}.section{padding:55px 0}.card,.form-card{padding:18px}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="container nav-inner">
+    <a href="#" class="logo">Prompt<span>Craft</span> AI Studio</a>
+    <button class="menu" id="menuBtn" aria-label="Open menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#tools">Studio</a><a href="#storyboard">Storyboard</a><a href="#library">Library</a><a href="#about">About</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="badge">✦ Built for beginner prompt engineers</div>
+    <h1>Turn simple ideas into <span class="gradient">powerful AI prompts.</span></h1>
+    <p>PromptCraft helps you transform rough ideas into polished prompts and cinematic, scene-by-scene video storyboards.</p>
+    <div class="cta"><a class="btn primary" href="#tools">Start Creating →</a><a class="btn" href="#library">Explore Prompts</a></div>
+  </div>
+</header>
+
+<section class="section" id="about">
+<div class="container">
+  <div class="section-head"><div class="eyebrow">Why PromptCraft</div><h2>Less guessing. More creating.</h2><p>A focused toolkit for students, creators, entrepreneurs, and anyone learning how to communicate with AI.</p></div>
+  <div class="grid">
+    <article class="card"><div class="icon">✍️</div><h3>Prompt Generator</h3><p>Turn a short idea into a structured prompt with subject, style, mood, lighting, camera and output details.</p></article>
+    <article class="card"><div class="icon">🎬</div><h3>Video Storyboard</h3><p>Break a story idea into clear scenes with narration, visuals, camera direction and image prompts.</p></article>
+    <article class="card"><div class="icon">📚</div><h3>Prompt Library</h3><p>Browse ready-to-adapt examples for education, storytelling, business, images and social media.</p></article>
+  </div>
+</div>
+</section>
+
+<section class="section" id="tools">
+<div class="container">
+  <div class="section-head"><div class="eyebrow">Studio</div><h2>Prompt Generator</h2><p>Describe your idea, choose a direction, and generate a professional prompt.</p></div>
+  <div class="tool">
+    <div class="form-card">
+      <label for="idea">Your idea</label>
+      <textarea id="idea" placeholder="Example: A student discovers her confidence at school."></textarea>
+      <label for="type">Content type</label>
+      <select id="type"><option>AI image</option><option>AI video</option><option>Educational content</option><option>Storytelling</option><option>Social media</option></select>
+      <label for="style">Style</label>
+      <select id="style"><option>Cinematic realistic</option><option>3D animation</option><option>Documentary</option><option>Minimal modern</option><option>Illustrated</option></select>
+      <label for="mood">Mood</label>
+      <select id="mood"><option>Inspirational</option><option>Emotional</option><option>Peaceful</option><option>Energetic</option><option>Mysterious</option></select>
+      <label for="ratio">Aspect ratio</label>
+      <select id="ratio"><option>9:16 vertical</option><option>16:9 landscape</option><option>1:1 square</option></select>
+      <button class="btn primary" id="generatePrompt">Generate Professional Prompt ✦</button>
+    </div>
+    <div class="form-card result">
+      <div class="section-head"><div class="eyebrow">Output</div><h2>Your prompt</h2></div>
+      <div class="result-box" id="promptOutput">Your generated prompt will appear here...</div>
+      <div class="result-actions"><button class="btn" id="copyPrompt">Copy Prompt</button><button class="btn" id="clearPrompt">Clear</button></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="storyboard">
+<div class="container">
+  <div class="section-head"><div class="eyebrow">Video Creator</div><h2>AI Video Storyboard</h2><p>Build a simple cinematic plan from one story idea.</p></div>
+  <div class="tool">
+    <div class="form-card">
+      <label for="story">Story idea</label>
+      <textarea id="story" placeholder="Example: A shy student learns to speak confidently in class."></textarea>
+      <label for="duration">Duration</label>
+      <select id="duration"><option>30 seconds</option><option selected>60 seconds</option><option>90 seconds</option><option>2 minutes</option></select>
+      <label for="videoStyle">Visual style</label>
+      <select id="videoStyle"><option>Cinematic realistic</option><option>Realistic 3D animation</option><option>Educational documentary</option></select>
+      <button class="btn primary" id="generateStory">Create Storyboard 🎬</button>
+    </div>
+    <div class="form-card">
+      <div class="section-head"><div class="eyebrow">Storyboard</div><h2 id="storyTitle">Your scenes</h2></div>
+      <div class="storyboard" id="storyOutput"><div class="scene"><strong>Waiting for your idea...</strong><p>Enter a story idea and click Create Storyboard.</p></div></div>
+      <div class="result-actions"><button class="btn" id="copyStoryboard">Copy Storyboard</button></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="library">
+<div class="container">
+  <div class="section-head"><div class="eyebrow">Library</div><h2>Starter Prompt Library</h2><p>Use these as starting points and customize them for your own projects.</p></div>
+  <div class="library">
+    <article class="prompt-card"><span class="tag">AI VIDEO</span><h3>Motivational Story</h3><p>“Create a cinematic short story about a young person overcoming self-doubt, using expressive visuals, natural lighting and an uplifting ending.”</p></article>
+    <article class="prompt-card"><span class="tag">EDUCATION</span><h3>Explain a Concept</h3><p>“Explain this topic for a secondary-school student using simple language, a clear example, step-by-step reasoning and a short practice question.”</p></article>
+    <article class="prompt-card"><span class="tag">IMAGE</span><h3>Cinematic Portrait</h3><p>“Create a realistic cinematic scene with natural lighting, detailed environment, expressive composition, shallow depth of field and professional visual storytelling.”</p></article>
+  </div>
+</div>
+</section>
+
+<footer id="footer"><div class="container">PromptCraft AI Studio · Learn the craft. Shape the prompt. Create the vision.</div></footer>
+<div class="toast" id="toast">Copied!</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const toast = msg => { $("toast").textContent=msg; $("toast").classList.add("show"); setTimeout(()=>$("toast").classList.remove("show"),1800); };
+
+$("menuBtn").onclick=()=> $("navLinks").classList.toggle("open");
+document.querySelectorAll(".nav-links a").forEach(a=>a.onclick=()=>$("navLinks").classList.remove("open"));
+
+$("generatePrompt").onclick=()=>{
+  const idea=$("idea").value.trim();
+  if(!idea){$("idea").focus();toast("Enter an idea first.");return;}
+  const prompt=`Create a ${$("type").value.toLowerCase()} based on this concept: "${idea}".
+
+Visual direction: ${$("style").value}.
+Mood: ${$("mood").value}.
+Format: ${$("ratio").value}.
+
+Make the result visually compelling, coherent and beginner-friendly. Include strong composition, appropriate lighting, realistic environmental details, clear subject focus and professional visual storytelling. Avoid unnecessary text, distorted anatomy and clutter. The final result should communicate the original idea clearly and emotionally.`;
+  $("promptOutput").textContent=prompt;
+  toast("Prompt generated!");
+};
+
+$("copyPrompt").onclick=async()=>{
+  const t=$("promptOutput").textContent;
+  if(t.startsWith("Your generated")) return toast("Generate a prompt first.");
+  await navigator.clipboard.writeText(t);toast("Prompt copied!");
+};
+$("clearPrompt").onclick=()=>{$("idea").value="";$("promptOutput").textContent="Your generated prompt will appear here...";};
+
+$("generateStory").onclick=()=>{
+  const idea=$("story").value.trim();
+  if(!idea){$("story").focus();toast("Enter a story idea first.");return;}
+  const style=$("videoStyle").value, duration=$("duration").value;
+  const scenes=[
+    ["Scene 1 — Hook","Open with a visually striking moment that immediately introduces the central conflict. Narration: “Sometimes one small moment can change everything.”"],
+    ["Scene 2 — The Challenge",`Show the main character facing the challenge described in: "${idea}". Use ${style.toLowerCase()} visuals and natural, expressive movement.`],
+    ["Scene 3 — Turning Point","Show a meaningful decision or discovery. Use a slow camera push-in, expressive facial/body language and a noticeable shift in mood."],
+    ["Scene 4 — Transformation","Show the character taking action. Use dynamic but believable camera movement, detailed environment and purposeful lighting."],
+    ["Scene 5 — Message","End with a hopeful visual that reinforces the lesson. Narration: “Your next step may be small, but it can still change your story.”"]
+  ];
+  $("storyTitle").textContent=`${duration} · ${style}`;
+  $("storyOutput").innerHTML=scenes.map(([title,text],i)=>`<div class="scene"><strong>${title}</strong><p>${text}</p><p><strong>Image prompt:</strong> ${style}, cinematic composition, realistic lighting, detailed environment, emotionally expressive storytelling, vertical 9:16.</p></div>`).join("");
+  toast("Storyboard created!");
+};
+$("copyStoryboard").onclick=async()=>{
+  const text=[...document.querySelectorAll("#storyOutput .scene")].map(s=>s.innerText).join("\n\n");
+  if(!text||text.includes("Waiting for")) return toast("Create a storyboard first.");
+  await navigator.clipboard.writeText(text);toast("Storyboard copied!");
+};
+</script>
+</body>
+</html>
